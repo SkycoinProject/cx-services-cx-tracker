@@ -1,0 +1,19 @@
+[server]
+ip = "127.0.0.1"
+port = 8085
+
+[c0rs]
+allowed-origins = [
+    "http://localhost:4200"
+]
+allowed-headers = [
+    "Content-Type",
+    "Authorization",
+    "Origin"
+]
+allowed-methods = [
+    "GET",
+    "PUT"
+]
+allow-all = false
+max-age = "12h"

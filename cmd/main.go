@@ -1,0 +1,22 @@
+package main
+
+import (
+	"github.com/watercompany/cx-tracker/src/app"
+	"github.com/watercompany/cx-tracker/src/config"
+	"github.com/watercompany/cx-tracker/src/tracker"
+)
+
+// @title Skywire CX Tracker API
+// @version 1.0
+// @description This is a Skywire CX Tracker service
+
+// @host localhost:8083
+// @BasePath /api/v1
+func main() {
+	config.Init("tracker-config")
+
+	uc := tracker.DefaultController()
+	app.NewServer(
+		uc,
+	).Run()
+}
