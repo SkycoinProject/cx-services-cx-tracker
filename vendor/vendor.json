@@ -125,6 +125,12 @@
 			"revisionTime": "2019-03-06T14:29:09Z"
 		},
 		{
+			"checksumSHA1": "Z7rkupTQRAZzzTCqDLiSbNR70to=",
+			"path": "github.com/konsorten/go-windows-terminal-sequences",
+			"revision": "f55edac94c9bbba5d6182a4be46d86a2c9b5b50e",
+			"revisionTime": "2019-02-26T22:47:05Z"
+		},
+		{
 			"checksumSHA1": "q/hSyd1yaEPDHNQoA790H6F6lu8=",
 			"path": "github.com/magiconair/properties",
 			"revision": "7757cc9fdb852f7579b24170bcacda2c7471bb6a",
@@ -159,6 +165,12 @@
 			"path": "github.com/pelletier/go-toml",
 			"revision": "728039f679cbcd4f6a54e080d2219a4c4928c546",
 			"revisionTime": "2019-04-30T03:50:10Z"
+		},
+		{
+			"checksumSHA1": "NklIc+ObuqosIKzqKcPtFdCcTao=",
+			"path": "github.com/sirupsen/logrus",
+			"revision": "5521996833c095f5ac75d99687cef8ad344ded12",
+			"revisionTime": "2019-04-23T09:34:05Z"
 		},
 		{
 			"checksumSHA1": "c8iTmaJDIg/GXEaTwpGPSEuB7gI=",
