@@ -4,7 +4,7 @@ port = 8085
 
 [c0rs]
 allowed-origins = [
-    "http://localhost:4200"
+    "*"
 ]
 allowed-headers = [
     "Content-Type",
