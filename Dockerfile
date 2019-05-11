@@ -5,8 +5,8 @@ COPY . ${GOPATH}/src/github.com/watercompany/cx-tracker
 WORKDIR ${GOPATH}/src/github.com/watercompany/cx-tracker
 
 ENV GOARCH="amd64" \
-		CGO_ENABLED="0" \
-		GOOS="linux"
+    CGO_ENABLED="0" \
+    GOOS="linux"
 
 RUN go install ./cmd/
 RUN sh -c "mkdir -p /tmp/files/usr/bin"
