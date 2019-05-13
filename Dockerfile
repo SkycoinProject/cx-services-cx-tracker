@@ -14,7 +14,7 @@ RUN cp ${GOPATH}/bin/cmd /tmp/files/usr/bin/cx-tracker
 
 FROM busybox
 
-VOLUME /root/.skywire-uptime-system/
+VOLUME /root/.cx-tracker/
 
 COPY --from=build /tmp/files /
 
