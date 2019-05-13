@@ -9,7 +9,7 @@ import (
 func Init(conf string) {
 	viper.AutomaticEnv()
 	viper.SetConfigName(conf)
-	viper.AddConfigPath("$HOME/.skywire-uptime-system/")
+	viper.AddConfigPath("$HOME/.cx-tracker/")
 	viper.AddConfigPath(".")
 	viper.WatchConfig()
 	viper.OnConfigChange(func(e fsnotify.Event) {
