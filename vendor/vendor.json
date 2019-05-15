@@ -53,10 +53,36 @@
 			"versionExact": "v1.3.0"
 		},
 		{
+			"checksumSHA1": "edFpnqOky6tMwR+Jj21IFqglS54=",
+			"path": "github.com/golang-migrate/migrate",
+			"revision": "f2e5e31837ffec1092a0d9c0cb02fdb5a53065bf",
+			"revisionTime": "2019-04-27T05:52:56Z"
+		},
+		{
+			"path": "github.com/golang-migrate/migrate/v4/database",
+			"revision": "f2e5e31837ffec1092a0d9c0cb02fdb5a53065bf"
+		},
+		{
+			"path": "github.com/golang-migrate/migrate/v4/source",
+			"revision": "f2e5e31837ffec1092a0d9c0cb02fdb5a53065bf"
+		},
+		{
 			"checksumSHA1": "Wp97rIwFg54dNwuCeR9Vslaehtw=",
 			"path": "github.com/golang/protobuf/proto",
 			"revision": "e91709a02e0e8ff8b86b7aa913fdc9ae9498e825",
 			"revisionTime": "2019-04-09T05:09:43Z"
+		},
+		{
+			"checksumSHA1": "z1Eg/1dJj3MeY9PkMYjdfboYXxg=",
+			"path": "github.com/hashicorp/errwrap",
+			"revision": "8a6fb523712970c966eefc6b39ed2c5e74880354",
+			"revisionTime": "2018-08-24T00:39:10Z"
+		},
+		{
+			"checksumSHA1": "hz4ZLFtmKMPCoS8zFuo/6ViWI1Q=",
+			"path": "github.com/hashicorp/go-multierror",
+			"revision": "886a7fbe3eb1c874d46f623bfa70af45f425b3d1",
+			"revisionTime": "2018-08-24T00:40:42Z"
 		},
 		{
 			"checksumSHA1": "GKF9N9xI+1zO3bVmC5Vi0Jta5as=",
