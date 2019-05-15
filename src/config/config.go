@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Init - config initialization
 func Init(conf string) {
 	viper.AutomaticEnv()
 	viper.SetConfigName(conf)

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 	"github.com/watercompany/cx-tracker/src/api"
 )
 
@@ -29,7 +30,7 @@ func (ctrl Controller) RegisterAPIs(public *gin.RouterGroup, closed *gin.RouterG
 // @Description Returns uptime info for nodes from the request
 // @Tags config
 // @Produce json
-// @Success 201 {array} string
+// @Success 201 string
 // @Failure 500 {object} api.ErrorResponse
 // @Router /config [put]
 func (ctrl Controller) updateConfig(c *gin.Context) {
@@ -39,7 +40,12 @@ func (ctrl Controller) updateConfig(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, ctrl.service.saveConfig(data))
+	hash, err := ctrl.service.saveConfig(data)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, hash)
 }
 
 // @Summary Returns config file content
@@ -58,5 +64,7 @@ func (ctrl Controller) getConfig(c *gin.Context) {
 		return
 	}
 
-	c.Writer.Write(response)
+	if _, err := c.Writer.Write(response); err != nil {
+		log.Error("Error writing response: ", err)
+	}
 }

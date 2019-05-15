@@ -3,6 +3,8 @@ package tracker
 import (
 	"crypto/sha256"
 	"fmt"
+
+	log "github.com/sirupsen/logrus"
 )
 
 //Service handles tracker service layer
@@ -17,13 +19,16 @@ func DefaultService() Service {
 	}
 }
 
-func (s *Service) saveConfig(data []byte) string {
+func (s *Service) saveConfig(data []byte) (string, error) {
 	h := sha256.New()
-	h.Write(data)
+	if _, err := h.Write(data); err != nil {
+		log.Error("Error writing data: ", err)
+		return "", err
+	}
 	hash := fmt.Sprintf("%x", h.Sum(nil))
 
 	s.store[hash] = data
-	return hash
+	return hash, nil
 }
 
 func (s *Service) readConfig(hash string) []byte {

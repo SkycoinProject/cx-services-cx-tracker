@@ -9,10 +9,12 @@ import (
 	"github.com/watercompany/cx-tracker/src/api"
 )
 
+// Server model
 type Server struct {
 	Engine *gin.Engine
 }
 
+// NewServer - server initialization
 func NewServer(ctrls ...api.Controller) *Server {
 	if viper.GetBool("server.release-mode") {
 		gin.SetMode(gin.ReleaseMode)
@@ -26,8 +28,11 @@ func NewServer(ctrls ...api.Controller) *Server {
 	return server
 }
 
+// Run - run server
 func (s *Server) Run() {
-	s.Engine.Run(serverAddress())
+	if err := s.Engine.Run(serverAddress()); err != nil {
+		panic(err.Error())
+	}
 }
 
 func (s *Server) initCors() {
