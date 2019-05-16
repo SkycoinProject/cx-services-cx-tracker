@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/watercompany/cx-tracker/src/app"
 	"github.com/watercompany/cx-tracker/src/config"
+	"github.com/watercompany/cx-tracker/src/database/postgres"
 	"github.com/watercompany/cx-tracker/src/tracker"
 )
 
@@ -14,6 +15,9 @@ import (
 // @BasePath /api/v1
 func main() {
 	config.Init("tracker-config")
+
+	tearDown := postgres.Init()
+	defer tearDown()
 
 	uc := tracker.DefaultController()
 	app.NewServer(

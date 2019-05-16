@@ -1,10 +1,11 @@
 package tracker
 
 import (
+	"net"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	"github.com/watercompany/cx-tracker/src/api"
 )
 
@@ -22,7 +23,8 @@ func DefaultController() Controller {
 
 // RegisterAPIs registration of controller routes
 func (ctrl Controller) RegisterAPIs(public *gin.RouterGroup, closed *gin.RouterGroup) {
-	public.PUT("/config", ctrl.updateConfig)
+	public.PUT("/config", ctrl.saveConfig)
+	public.GET("/configs", ctrl.getConfigs)
 	public.GET("/config/:hash", ctrl.getConfig)
 }
 
@@ -33,14 +35,16 @@ func (ctrl Controller) RegisterAPIs(public *gin.RouterGroup, closed *gin.RouterG
 // @Success 201 string
 // @Failure 500 {object} api.ErrorResponse
 // @Router /config [put]
-func (ctrl Controller) updateConfig(c *gin.Context) {
+func (ctrl Controller) saveConfig(c *gin.Context) {
 	data, err := c.GetRawData()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	hash, err := ctrl.service.saveConfig(data)
+	ipAddress := getIPAddress(c.Request)
+
+	hash, err := ctrl.service.createCxApplication(data, ipAddress)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
 		return
@@ -58,13 +62,53 @@ func (ctrl Controller) updateConfig(c *gin.Context) {
 // @Router /config [get]
 func (ctrl Controller) getConfig(c *gin.Context) {
 	hash := c.Param("hash")
-	response := ctrl.service.readConfig(hash)
-	if len(response) == 0 {
-		c.AbortWithStatusJSON(http.StatusNotFound, api.ErrorResponse{Error: "No data matching hash: " + hash})
+	app, err := ctrl.service.getApplicationBy(hash)
+
+	if err != nil {
+		if err == errCannotFindUser {
+			c.AbortWithStatusJSON(http.StatusNotFound, api.ErrorResponse{Error: err.Error() + hash})
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	if _, err := c.Writer.Write(response); err != nil {
-		log.Error("Error writing response: ", err)
+	c.JSON(http.StatusOK, app)
+}
+
+// @Summary Returns list of all stored configs
+// @Description Returns list of all stored configs
+// @Tags config
+// @Produce json
+// @Success 200 {array} string
+// @Router /configs [get]
+func (ctrl Controller) getConfigs(c *gin.Context) {
+	apps, err := ctrl.service.findAllApplications()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
+		return
 	}
+	c.JSON(http.StatusOK, apps)
+}
+
+func getIPAddress(r *http.Request) string {
+	for _, h := range []string{"X-Forwarded-For", "X-Real-Ip"} {
+		addresses := strings.Split(r.Header.Get(h), ",")
+		// march from right to left until we get a public address
+		// that will be the address right before our proxy.
+		if len(addresses[0]) == 0 {
+			return r.RemoteAddr
+		}
+		for i := len(addresses) - 1; i >= 0; i-- {
+			ip := strings.TrimSpace(addresses[i])
+			// header can contain spaces too, strip those out.
+			realIP := net.ParseIP(ip)
+			if !realIP.IsGlobalUnicast() {
+				// bad address, go to next
+				continue
+			}
+			return ip
+		}
+	}
+	return ""
 }
