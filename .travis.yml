@@ -21,4 +21,5 @@ deploy:
   provider: script
   script: bash docker_push.sh
   on:
-    condition: $TRAVIS_PULL_REQUEST = false
+    all_branches: true
+    condition: "$TRAVIS_PULL_REQUEST = false && $TRAVIS_BRANCH =~ ^master|develop$"
