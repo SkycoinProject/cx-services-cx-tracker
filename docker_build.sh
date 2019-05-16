@@ -6,7 +6,7 @@ REGISTRY="registry.skycoin.net"
 
 # Build cx-tracker image
 if [[ $TRAVIS_BRANCH == "master" ]]; then
-    docker build -t $REGISTRY/cx-tracker .
-else
-    docker build -t $REGISTRY/cx-tracker:$TRAVIS_BRANCH .
+  docker build -t $REGISTRY/cx-tracker .
+elif [[ $TRAVIS_BRANCH == "develop" ]]; then
+  docker build -t $REGISTRY/cx-tracker:develop .
 fi
