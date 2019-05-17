@@ -36,6 +36,16 @@ func (ctrl Controller) RegisterAPIs(public *gin.RouterGroup, closed *gin.RouterG
 // @Failure 500 {object} api.ErrorResponse
 // @Router /config [put]
 func (ctrl Controller) saveConfig(c *gin.Context) {
+	var conf cxApplicationConfig //TODO consider this approach for validating the request
+	if err := c.BindJSON(&conf); err != nil {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, api.ErrorResponse{Error: errUnableToParseConfig.Error()})
+		return
+	}
+	if len(conf.GenesisHash) == 0 {
+		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, api.ErrorResponse{Error: errUnableToParseConfig.Error()})
+		return
+	}
+
 	data, err := c.GetRawData()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
