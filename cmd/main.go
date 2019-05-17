@@ -9,7 +9,7 @@ import (
 
 // @title Skywire CX Tracker API
 // @version 1.0
-// @description This is a Skywire CX Tracker service
+// @description This is a Skywire CX Tracker service used for saving configurations
 
 // @host localhost:8083
 // @BasePath /api/v1

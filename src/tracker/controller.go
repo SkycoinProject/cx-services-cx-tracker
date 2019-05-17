@@ -25,26 +25,29 @@ func DefaultController() Controller {
 func (ctrl Controller) RegisterAPIs(public *gin.RouterGroup, closed *gin.RouterGroup) {
 	public.PUT("/config", ctrl.saveConfig)
 	public.GET("/configs", ctrl.getConfigs)
-	public.GET("/config/:hash", ctrl.getConfig)
+	public.GET("/config/:genesisHash", ctrl.getConfig)
 }
 
-// @Summary Returns uptime info for previous month
-// @Description Returns uptime info for nodes from the request
-// @Tags config
-// @Produce json
-// @Success 201 string
+// @Summary Save/update configuration
+// @Description Save/update configuration
+// @Tags configuration
+// @Param tracker.cxApplicationConfig body cxApplicationConfig true "Request for creating/updating configuration"
+// @Success 201
 // @Failure 500 {object} api.ErrorResponse
 // @Router /config [put]
 func (ctrl Controller) saveConfig(c *gin.Context) {
-	var conf cxApplicationConfig //TODO consider this approach for validating the request
-	if err := c.BindJSON(&conf); err != nil {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, api.ErrorResponse{Error: errUnableToParseConfig.Error()})
-		return
-	}
-	if len(conf.GenesisHash) == 0 {
-		c.AbortWithStatusJSON(http.StatusUnprocessableEntity, api.ErrorResponse{Error: errUnableToParseConfig.Error()})
-		return
-	}
+
+	/*
+		var conf cxApplicationConfig //TODO consider this approach for validating the request
+		if err := c.BindJSON(&conf); err != nil {
+			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, api.ErrorResponse{Error: errUnableToParseConfig.Error()})
+			return
+		}
+		if len(conf.GenesisHash) == 0 {
+			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, api.ErrorResponse{Error: errUnableToParseConfig.Error()})
+			return
+		}
+	*/
 
 	data, err := c.GetRawData()
 	if err != nil {
@@ -54,28 +57,28 @@ func (ctrl Controller) saveConfig(c *gin.Context) {
 
 	ipAddress := getIPAddress(c.Request)
 
-	hash, err := ctrl.service.createCxApplication(data, ipAddress)
-	if err != nil {
+	if err := ctrl.service.createCxApplication(data, ipAddress); err != nil {
 		c.JSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, hash)
+	c.Status(http.StatusCreated)
 }
 
-// @Summary Returns config file content
-// @Description Returns config file content from memory
-// @Tags config
+// @Summary Returns configuration for genesisHash
+// @Description Returns configuration for genesisHash
+// @Tags configuration
 // @Produce json
-// @Param Hash query string true "Config hash"
-// @Success 200 {array} string
+// @Param genesisHash query string true "Config genesisHash"
+// @Success 200 {object} tracker.CxApplication
 // @Failure 404 {object} api.ErrorResponse
-// @Router /config [get]
+// @Failure 500 {object} api.ErrorResponse
+// @Router /config/:genesisHash [get]
 func (ctrl Controller) getConfig(c *gin.Context) {
-	hash := c.Param("hash")
-	app, err := ctrl.service.getApplicationBy(hash)
+	hash := c.Param("genesisHash")
+	app, err := ctrl.service.getApplicationByGenesisHash(hash)
 
 	if err != nil {
-		if err == errCannotFindUser {
+		if err == errCannotFindApplication {
 			c.AbortWithStatusJSON(http.StatusNotFound, api.ErrorResponse{Error: err.Error() + hash})
 			return
 		}
@@ -86,11 +89,12 @@ func (ctrl Controller) getConfig(c *gin.Context) {
 	c.JSON(http.StatusOK, app)
 }
 
-// @Summary Returns list of all stored configs
-// @Description Returns list of all stored configs
-// @Tags config
+// @Summary Returns list of all stored configurations
+// @Description Returns list of all stored configurations
+// @Tags configuration
 // @Produce json
-// @Success 200 {array} string
+// @Success 200 {array} tracker.CxApplication
+// @Failure 500 {object} api.ErrorResponse
 // @Router /configs [get]
 func (ctrl Controller) getConfigs(c *gin.Context) {
 	apps, err := ctrl.service.findAllApplications()

@@ -7,8 +7,8 @@ import (
 
 // CxApplication represents DB record for CX Application run on separate chain
 type CxApplication struct {
-	ID        uint            `gorm:"primary_key" json:"id"`
-	Hash      string          `json:"hash"`
+	ID        uint            `gorm:"primary_key" json:"-"`
+	Hash      string          `json:"-"`
 	Config    json.RawMessage `json:"config"`
 	ChainType chainType       `json:"chainType"`
 	CreatedAt time.Time       `json:"createdAt"`
@@ -19,7 +19,7 @@ type CxApplication struct {
 
 // Server represents DB record for one node that reported to the service that's running one of existing CX Applications
 type Server struct {
-	ID              uint       `gorm:"primary_key" json:"id"`
+	ID              uint       `gorm:"primary_key" json:"-"`
 	Address         string     `json:"address"`
 	CxApplicationID uint       `json:"-"`
 	CreatedAt       time.Time  `json:"createdAt"`
@@ -27,9 +27,9 @@ type Server struct {
 	DeletedAt       *time.Time `json:"-"`
 }
 
-type cxApplicationConfig struct {
-	GenesisHash string `json:"genesisHash"`
-}
+// type cxApplicationConfig struct {
+// 	GenesisHash string `json:"genesisHash"`
+// }
 
 type chainType string
 

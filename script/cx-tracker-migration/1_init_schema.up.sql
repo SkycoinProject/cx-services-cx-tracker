@@ -1,8 +1,8 @@
 CREATE TABLE cx_applications (
     id          serial primary key,
-    hash        varchar not null,
+    hash        varchar not null UNIQUE,
     config      json not null,
-    chain_type   varchar not null,
+    chain_type  varchar not null,
     created_at  timestamp not null,
     updated_at  timestamp not null,
     deleted_at  timestamp null
