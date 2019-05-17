@@ -16,7 +16,9 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {LayoutComponent} from './layout/layout.component';
-import {AllConfigurationsComponent} from './all-configurations/all-configurations.component';
+import {AllConfigurationsComponent} from './components/all-configurations/all-configurations.component';
+import {HttpService} from './services/http.service';
+import {TransactionDataService} from './services/transaction.data.service';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import {AllConfigurationsComponent} from './all-configurations/all-configuration
     })
   ],
   providers: [
+    HttpService,
+    TransactionDataService,
     { provide: MAT_DIALOG_DATA,
       useValue: {}
     },
