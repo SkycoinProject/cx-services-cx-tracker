@@ -6,28 +6,28 @@ import (
 	"github.com/watercompany/cx-tracker/src/database/postgres"
 )
 
-type store interface {
+type data interface {
 	create(app *CxApplication) error
 	getBy(hash string) (CxApplication, error)
 	findAll() ([]CxApplication, error)
 }
 
-type data struct {
+type store struct {
 	db *gorm.DB
 }
 
-func DefaultData() data {
-	return NewData(postgres.DB)
+func defaultData() data {
+	return newData(postgres.DB)
 }
 
-func NewData(database *gorm.DB) data {
-	return data{
+func newData(database *gorm.DB) data {
+	return store{
 		db: database,
 	}
 }
 
-func (u data) create(app *CxApplication) error {
-	db := u.db.Begin()
+func (s store) create(app *CxApplication) error {
+	db := s.db.Begin()
 	var dbError error
 	for _, err := range db.Create(app).GetErrors() {
 		dbError = err
@@ -42,8 +42,8 @@ func (u data) create(app *CxApplication) error {
 	return nil
 }
 
-func (u data) getBy(hash string) (app CxApplication, err error) {
-	record := u.db.Set("gorm:auto_preload", true).Find(&app, "hash = ?", hash)
+func (s store) getBy(hash string) (app CxApplication, err error) {
+	record := s.db.Set("gorm:auto_preload", true).Find(&app, "hash = ?", hash)
 
 	if record.RecordNotFound() {
 		err = errCannotFindUser
@@ -59,8 +59,8 @@ func (u data) getBy(hash string) (app CxApplication, err error) {
 	return
 }
 
-func (u data) findAll() (apps []CxApplication, err error) {
-	record := u.db.Set("gorm:auto_preload", true).Find(&apps)
+func (s store) findAll() (apps []CxApplication, err error) {
+	record := s.db.Set("gorm:auto_preload", true).Find(&apps)
 
 	if errs := record.GetErrors(); len(errs) > 0 {
 		for err := range errs {

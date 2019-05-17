@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// CxApplication represents DB record for CX Application run on separate chain
 type CxApplication struct {
 	ID        uint            `gorm:"primary_key" json:"id"`
 	Hash      string          `json:"hash"`
@@ -16,6 +17,7 @@ type CxApplication struct {
 	Servers   []Server        `json:"servers" gorm:"foreignkey:CxApplicationID;"`
 }
 
+// Server represents DB record for one node that reported to the service that's running one of existing CX Applications
 type Server struct {
 	ID              uint       `gorm:"primary_key" json:"id"`
 	Address         string     `json:"address"`
@@ -28,6 +30,6 @@ type Server struct {
 type chainType string
 
 const (
-	cx    chainType = "cx"
-	fiber chainType = "fiber"
+	cx chainType = "cx"
+	// fiber chainType = "fiber" //TODO enable once integration with fiber is supported
 )

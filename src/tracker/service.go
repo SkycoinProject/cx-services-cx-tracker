@@ -10,18 +10,18 @@ import (
 
 //Service handles tracker service layer
 type Service struct {
-	db store
+	db data
 }
 
 //DefaultService creates new instance of service
 func DefaultService() Service {
 	return Service{
-		db: DefaultData(),
+		db: defaultData(),
 	}
 }
 
 // NewService prepares new instance of Service
-func NewService(appStore store) Service {
+func NewService(appStore data) Service {
 	return Service{
 		db: appStore,
 	}

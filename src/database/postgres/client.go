@@ -6,9 +6,9 @@ import (
 
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/postgres"
-	_ "github.com/golang-migrate/migrate/source/file"
+	_ "github.com/golang-migrate/migrate/source/file" // required by golang-migrate
 	"github.com/jinzhu/gorm"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // required by GORM
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -22,16 +22,19 @@ func Init() func() {
 	DB, err = gorm.Open("postgres", dBInfo())
 	DB.LogMode(viper.GetBool("database.log-mode"))
 	if err != nil {
-		log.Fatalf("Failed to connect to database %v", err)
+		log.Fatal("Failed to connect to database", err)
 	}
 	log.Info("Database connected")
 
 	driver, err := postgres.WithInstance(DB.DB(), &postgres.Config{})
+	if err != nil {
+		log.Fatal("Error while loading driver for database migration", err)
+	}
 	m, err := migrate.NewWithDatabaseInstance(
 		viper.GetString("database.migration-source"),
 		viper.GetString("database.name"), driver)
 	if err != nil {
-		log.Fatalf("Error while preparing database migration %v", err)
+		log.Fatal("Error while preparing database migration", err)
 	}
 
 	if err := m.Up(); err != nil {
