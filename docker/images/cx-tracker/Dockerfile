@@ -1,8 +1,10 @@
 FROM golang:1.11-stretch AS build
 
-COPY . ${GOPATH}/src/github.com/watercompany/cx-tracker
+WORKDIR ${GOPATH}/src/github.com/watercompany/cx-tracker/
 
-WORKDIR ${GOPATH}/src/github.com/watercompany/cx-tracker
+ADD cmd/ cmd/
+ADD src/ src/
+ADD vendor/ vendor/
 
 ENV GOARCH="amd64" \
     CGO_ENABLED="0" \
