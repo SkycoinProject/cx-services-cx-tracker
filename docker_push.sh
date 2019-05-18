@@ -7,5 +7,6 @@ REGISTRY="registry.skycoin.net"
 # Login the private registry
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin $REGISTRY
 
-# Push the image
+# Push the images
 docker push $REGISTRY/cx-tracker
+docker push $REGISTRY/cx-tracker-web
