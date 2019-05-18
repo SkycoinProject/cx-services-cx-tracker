@@ -10,4 +10,5 @@ if [[ $TRAVIS_BRANCH == "master" ]]; then
 	docker build -t $REGISTRY/cx-tracker-web -f docker/images/cx-tracker-web/Dockerfile .
 elif [[ $TRAVIS_BRANCH == "develop" ]]; then
   docker build -t $REGISTRY/cx-tracker:develop .
+	docker build -t $REGISTRY/cx-tracker-web:develop .
 fi
