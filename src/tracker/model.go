@@ -14,7 +14,7 @@ type CxApplication struct {
 	CreatedAt time.Time       `json:"createdAt"`
 	UpdatedAt time.Time       `json:"updatedAt"`
 	DeletedAt *time.Time      `json:"-"`
-	Servers   []Server        `json:"servers" gorm:"foreignkey:CxApplicationID;"`
+	Servers   []Server        `json:"servers" gorm:"foreignkey:CxApplicationID;association_autoupdate:false;"` //server should be updated separately
 }
 
 // Server represents DB record for one node that reported to the service that's running one of existing CX Applications

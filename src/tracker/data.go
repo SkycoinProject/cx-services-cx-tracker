@@ -11,6 +11,7 @@ type data interface {
 	getByHash(hash string) (CxApplication, error)
 	getByGenesisHash(genesisHash string) (CxApplication, error)
 	findAll() ([]CxApplication, error)
+	updateServer(server *Server) error
 }
 
 type store struct {
@@ -88,4 +89,20 @@ func (s store) findAll() (apps []CxApplication, err error) {
 		return
 	}
 	return
+}
+
+func (s store) updateServer(server *Server) error {
+	db := s.db.Begin()
+	var dbError error
+	for _, err := range db.Save(server).GetErrors() {
+		dbError = err
+		log.Errorf("Error while updating server with address: %v in DB: %v", server.Address, err)
+	}
+	if dbError != nil {
+		db.Rollback()
+		return dbError
+	}
+	db.Commit()
+
+	return nil
 }

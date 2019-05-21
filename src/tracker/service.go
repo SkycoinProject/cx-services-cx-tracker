@@ -48,15 +48,19 @@ func (us *Service) createCxApplication(config []byte, address string) error {
 			Servers:   []Server{server},
 		}
 	} else {
-		exsitingServer := false
+		exsitingServer := Server{}
 		for _, server := range app.Servers {
 			if address == server.Address {
-				exsitingServer = true
+				exsitingServer = server
 				break
 			}
 		}
 
-		if !exsitingServer {
+		if len(exsitingServer.Address) > 0 {
+			if err := us.db.updateServer(&exsitingServer); err != nil {
+				return err
+			}
+		} else {
 			server := Server{Address: address}
 			app.Servers = append(app.Servers, server)
 		}
