@@ -27,9 +27,9 @@ type Server struct {
 	DeletedAt       *time.Time `json:"-"`
 }
 
-// type cxApplicationConfig struct {
-// 	GenesisHash string `json:"genesisHash"`
-// }
+type cxApplicationConfig struct {
+	GenesisHash string `json:"genesisHash"`
+}
 
 type chainType string
 

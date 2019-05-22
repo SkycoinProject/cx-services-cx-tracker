@@ -28,6 +28,16 @@ func NewService(appStore data) Service {
 }
 
 func (us *Service) createCxApplication(config []byte, address string) error {
+	var conf cxApplicationConfig
+	if err := json.Unmarshal(config, &conf); err != nil {
+		log.Error("Error while parsing config: ", err)
+		return errUnableToParseConfig
+	}
+
+	if len(conf.GenesisHash) == 0 {
+		return errMissingMandatoryFields
+	}
+
 	h := sha256.New()
 	if _, err := h.Write(config); err != nil {
 		log.Error("Error writing data: ", err)
@@ -35,19 +45,10 @@ func (us *Service) createCxApplication(config []byte, address string) error {
 	}
 
 	hash := fmt.Sprintf("%x", h.Sum(nil))
-
 	app, err := us.db.getByHash(hash)
-	if err != nil && err == errCannotFindApplication {
-		configJSON := json.RawMessage(string(config))
-		server := Server{Address: address}
 
-		app = CxApplication{
-			Hash:      hash,
-			Config:    configJSON,
-			ChainType: cx,
-			Servers:   []Server{server},
-		}
-	} else {
+	switch err {
+	case nil:
 		exsitingServer := Server{}
 		for _, server := range app.Servers {
 			if address == server.Address {
@@ -64,6 +65,19 @@ func (us *Service) createCxApplication(config []byte, address string) error {
 			server := Server{Address: address}
 			app.Servers = append(app.Servers, server)
 		}
+
+	case errCannotFindApplication:
+		configJSON := json.RawMessage(string(config))
+		server := Server{Address: address}
+
+		app = CxApplication{
+			Hash:      hash,
+			Config:    configJSON,
+			ChainType: cx,
+			Servers:   []Server{server},
+		}
+	default:
+		return err
 	}
 
 	if err := us.db.createOrUpdate(&app); err != nil {

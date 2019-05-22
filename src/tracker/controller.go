@@ -1,6 +1,7 @@
 package tracker
 
 import (
+	"fmt"
 	"net"
 	"net/http"
 	"strings"
@@ -36,19 +37,6 @@ func (ctrl Controller) RegisterAPIs(public *gin.RouterGroup, closed *gin.RouterG
 // @Failure 500 {object} api.ErrorResponse
 // @Router /config [put]
 func (ctrl Controller) saveConfig(c *gin.Context) {
-
-	/*
-		var conf cxApplicationConfig //TODO consider this approach for validating the request
-		if err := c.BindJSON(&conf); err != nil {
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, api.ErrorResponse{Error: errUnableToParseConfig.Error()})
-			return
-		}
-		if len(conf.GenesisHash) == 0 {
-			c.AbortWithStatusJSON(http.StatusUnprocessableEntity, api.ErrorResponse{Error: errUnableToParseConfig.Error()})
-			return
-		}
-	*/
-
 	data, err := c.GetRawData()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
@@ -79,7 +67,7 @@ func (ctrl Controller) getConfig(c *gin.Context) {
 
 	if err != nil {
 		if err == errCannotFindApplication {
-			c.AbortWithStatusJSON(http.StatusNotFound, api.ErrorResponse{Error: err.Error() + hash})
+			c.AbortWithStatusJSON(http.StatusNotFound, api.ErrorResponse{Error: fmt.Errorf("%v %v", err, hash).Error()})
 			return
 		}
 		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})

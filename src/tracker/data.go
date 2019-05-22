@@ -44,51 +44,49 @@ func (s store) createOrUpdate(app *CxApplication) error {
 	return nil
 }
 
-func (s store) getByHash(hash string) (app CxApplication, err error) {
+func (s store) getByHash(hash string) (CxApplication, error) {
+	app := CxApplication{}
 	record := s.db.Set("gorm:auto_preload", true).Find(&app, "hash = ?", hash)
 
 	if record.RecordNotFound() {
-		err = errCannotFindApplication
-		return
+		return app, errCannotFindApplication
 	}
-	if errs := record.GetErrors(); len(errs) > 0 {
-		for err := range errs {
-			log.Errorf("Error occurred while fetching cx application by hash %v - %v", hash, err)
-		}
-		err = errUnableToRead
-		return
+
+	if record.Error != nil {
+		log.Errorf("Error occurred while fetching cx application by hash %v - %v", hash, record.Error)
+		return app, errUnableToRead
 	}
-	return
+
+	return app, nil
 }
 
-func (s store) getByGenesisHash(genesisHash string) (app CxApplication, err error) {
+func (s store) getByGenesisHash(genesisHash string) (CxApplication, error) {
+	app := CxApplication{}
 	record := s.db.Set("gorm:auto_preload", true).Find(&app, "config ->> 'genesisHash' = ?", genesisHash)
 
 	if record.RecordNotFound() {
-		err = errCannotFindApplication
-		return
+		return app, errCannotFindApplication
 	}
-	if errs := record.GetErrors(); len(errs) > 0 {
-		for err := range errs {
-			log.Errorf("Error occurred while fetching cx application by hash %v - %v", genesisHash, err)
-		}
-		err = errUnableToRead
-		return
+
+	if record.Error != nil {
+		log.Errorf("Error occurred while fetching cx application by genesis hash %v - %v", genesisHash, record.Error)
+		return app, errUnableToRead
 	}
-	return
+
+	return app, nil
 }
 
-func (s store) findAll() (apps []CxApplication, err error) {
+func (s store) findAll() ([]CxApplication, error) {
+	apps := []CxApplication{}
 	record := s.db.Set("gorm:auto_preload", true).Find(&apps)
 
 	if errs := record.GetErrors(); len(errs) > 0 {
 		for err := range errs {
 			log.Error("Error occurred while fetching cx applications ", err)
 		}
-		err = errUnableToRead
-		return
+		return apps, errUnableToRead
 	}
-	return
+	return apps, nil
 }
 
 func (s store) updateServer(server *Server) error {
