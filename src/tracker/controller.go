@@ -1,10 +1,12 @@
 package tracker
 
 import (
+	"fmt"
+	"net"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	"github.com/watercompany/cx-tracker/src/api"
 )
 
@@ -22,49 +24,93 @@ func DefaultController() Controller {
 
 // RegisterAPIs registration of controller routes
 func (ctrl Controller) RegisterAPIs(public *gin.RouterGroup, closed *gin.RouterGroup) {
-	public.PUT("/config", ctrl.updateConfig)
-	public.GET("/config/:hash", ctrl.getConfig)
+	public.PUT("/config", ctrl.saveConfig)
+	public.GET("/configs", ctrl.getConfigs)
+	public.GET("/config/:genesisHash", ctrl.getConfig)
 }
 
-// @Summary Returns uptime info for previous month
-// @Description Returns uptime info for nodes from the request
-// @Tags config
-// @Produce json
-// @Success 201 string
+// @Summary Save/update configuration
+// @Description Save/update configuration
+// @Tags configuration
+// @Param tracker.cxApplicationConfig body cxApplicationConfig true "Request for creating/updating configuration"
+// @Success 201
 // @Failure 500 {object} api.ErrorResponse
 // @Router /config [put]
-func (ctrl Controller) updateConfig(c *gin.Context) {
+func (ctrl Controller) saveConfig(c *gin.Context) {
 	data, err := c.GetRawData()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	hash, err := ctrl.service.saveConfig(data)
-	if err != nil {
+	ipAddress := getIPAddress(c.Request)
+
+	if err := ctrl.service.createCxApplication(data, ipAddress); err != nil {
 		c.JSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, hash)
+	c.Status(http.StatusCreated)
 }
 
-// @Summary Returns config file content
-// @Description Returns config file content from memory
-// @Tags config
+// @Summary Returns configuration for genesisHash
+// @Description Returns configuration for genesisHash
+// @Tags configuration
 // @Produce json
-// @Param Hash query string true "Config hash"
-// @Success 200 {array} string
+// @Param genesisHash query string true "Config genesisHash"
+// @Success 200 {object} tracker.CxApplication
 // @Failure 404 {object} api.ErrorResponse
-// @Router /config [get]
+// @Failure 500 {object} api.ErrorResponse
+// @Router /config/:genesisHash [get]
 func (ctrl Controller) getConfig(c *gin.Context) {
-	hash := c.Param("hash")
-	response := ctrl.service.readConfig(hash)
-	if len(response) == 0 {
-		c.AbortWithStatusJSON(http.StatusNotFound, api.ErrorResponse{Error: "No data matching hash: " + hash})
+	hash := c.Param("genesisHash")
+	app, err := ctrl.service.getApplicationByGenesisHash(hash)
+
+	if err != nil {
+		if err == errCannotFindApplication {
+			c.AbortWithStatusJSON(http.StatusNotFound, api.ErrorResponse{Error: fmt.Errorf("%v %v", err, hash).Error()})
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
 		return
 	}
 
-	if _, err := c.Writer.Write(response); err != nil {
-		log.Error("Error writing response: ", err)
+	c.JSON(http.StatusOK, app)
+}
+
+// @Summary Returns list of all stored configurations
+// @Description Returns list of all stored configurations
+// @Tags configuration
+// @Produce json
+// @Success 200 {array} tracker.CxApplication
+// @Failure 500 {object} api.ErrorResponse
+// @Router /configs [get]
+func (ctrl Controller) getConfigs(c *gin.Context) {
+	apps, err := ctrl.service.findAllApplications()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
+		return
 	}
+	c.JSON(http.StatusOK, apps)
+}
+
+func getIPAddress(r *http.Request) string {
+	for _, h := range []string{"X-Forwarded-For", "X-Real-Ip"} {
+		addresses := strings.Split(r.Header.Get(h), ",")
+		// march from right to left until we get a public address
+		// that will be the address right before our proxy.
+		if len(addresses[0]) == 0 {
+			return r.RemoteAddr
+		}
+		for i := len(addresses) - 1; i >= 0; i-- {
+			ip := strings.TrimSpace(addresses[i])
+			// header can contain spaces too, strip those out.
+			realIP := net.ParseIP(ip)
+			if !realIP.IsGlobalUnicast() {
+				// bad address, go to next
+				continue
+			}
+			return ip
+		}
+	}
+	return ""
 }

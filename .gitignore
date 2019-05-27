@@ -4,3 +4,6 @@
 
 # Config
 **/*config.toml
+
+# Swagger related files
+**/docs/

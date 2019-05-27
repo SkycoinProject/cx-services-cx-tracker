@@ -1,3 +1,13 @@
+[database]
+user = "postgres"
+password = "supersecretpass"
+host = "localhost"
+port = 5434
+name = "postgres"
+sslmode = "disable"
+migration-source = "file://../script/cx-tracker-migration"
+log-mode = true
+
 [server]
 ip = "127.0.0.1"
 port = 8085

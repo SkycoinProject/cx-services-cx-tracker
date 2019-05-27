@@ -53,18 +53,40 @@
 			"versionExact": "v1.3.0"
 		},
 		{
-			"checksumSHA1": "edFpnqOky6tMwR+Jj21IFqglS54=",
+			"checksumSHA1": "vadTIaqxX37or8F5/pTdNNOgjto=",
 			"path": "github.com/golang-migrate/migrate",
-			"revision": "f2e5e31837ffec1092a0d9c0cb02fdb5a53065bf",
-			"revisionTime": "2019-04-27T05:52:56Z"
+			"revision": "06d3ebde1ce7bde3cc3f63adb75aea0421e8ccf2",
+			"revisionTime": "2018-11-06T06:46:46Z",
+			"version": "=v3.4.0",
+			"versionExact": "v3.4.0"
 		},
 		{
-			"path": "github.com/golang-migrate/migrate/v4/database",
-			"revision": "f2e5e31837ffec1092a0d9c0cb02fdb5a53065bf"
+			"checksumSHA1": "/+p+Vv7+iSwi1r5jI9vfrvpck1Y=",
+			"path": "github.com/golang-migrate/migrate/database",
+			"revision": "e968e8a5f0fd43301a2e0ef025ce6db56eedb205",
+			"revisionTime": "2018-07-25T01:30:53Z",
+			"version": "=v3.4.0",
+			"versionExact": "v3.4.0"
 		},
 		{
-			"path": "github.com/golang-migrate/migrate/v4/source",
-			"revision": "f2e5e31837ffec1092a0d9c0cb02fdb5a53065bf"
+			"checksumSHA1": "X9N5sX0vieHGUK0LsXopdmrd5ME=",
+			"path": "github.com/golang-migrate/migrate/database/postgres",
+			"revision": "4d60607b0b2f9bbc0f954077ac0438b1d63ff2e9",
+			"revisionTime": "2018-08-29T19:14:54Z"
+		},
+		{
+			"checksumSHA1": "/Zm1Z1U1w7pNdPY0H7vaG0SLmFQ=",
+			"path": "github.com/golang-migrate/migrate/source",
+			"revision": "e968e8a5f0fd43301a2e0ef025ce6db56eedb205",
+			"revisionTime": "2018-07-25T01:30:53Z",
+			"version": "=v3.4.0",
+			"versionExact": "v3.4.0"
+		},
+		{
+			"checksumSHA1": "+UCQeYrep6UWvMEhYOjH9pv08yc=",
+			"path": "github.com/golang-migrate/migrate/source/file",
+			"revision": "4d60607b0b2f9bbc0f954077ac0438b1d63ff2e9",
+			"revisionTime": "2018-08-29T19:14:54Z"
 		},
 		{
 			"checksumSHA1": "Wp97rIwFg54dNwuCeR9Vslaehtw=",
@@ -167,6 +189,24 @@
 			"path": "github.com/konsorten/go-windows-terminal-sequences",
 			"revision": "f55edac94c9bbba5d6182a4be46d86a2c9b5b50e",
 			"revisionTime": "2019-02-26T22:47:05Z"
+		},
+		{
+			"checksumSHA1": "xvqMCXXlR74in/1c09UadpfXz9Y=",
+			"path": "github.com/lib/pq",
+			"revision": "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79",
+			"revisionTime": "2018-08-23T06:29:44Z"
+		},
+		{
+			"checksumSHA1": "EnMmNGgpDa5sNw0Zs5RhvNDcP2g=",
+			"path": "github.com/lib/pq/hstore",
+			"revision": "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79",
+			"revisionTime": "2018-08-23T06:29:44Z"
+		},
+		{
+			"checksumSHA1": "AU3fA8Sm33Vj9PBoRPSeYfxLRuE=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79",
+			"revisionTime": "2018-08-23T06:29:44Z"
 		},
 		{
 			"checksumSHA1": "q/hSyd1yaEPDHNQoA790H6F6lu8=",

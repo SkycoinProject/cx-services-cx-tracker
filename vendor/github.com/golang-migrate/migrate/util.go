@@ -1,7 +1,6 @@
 package migrate
 
 import (
-	"errors"
 	"fmt"
 	nurl "net/url"
 	"strings"
@@ -23,7 +22,7 @@ func NewMultiError(errs ...error) MultiError {
 	return MultiError{compactErrs}
 }
 
-// Error implements error. Multiple errors are concatenated with 'and's.
+// Error implements error. Mulitple errors are concatenated with 'and's.
 func (m MultiError) Error() string {
 	var strs = make([]string, 0)
 	for _, e := range m.Errs {
@@ -44,35 +43,15 @@ func suint(n int) uint {
 	return uint(n)
 }
 
-var errNoScheme = errors.New("no scheme")
-var errEmptyURL = errors.New("URL cannot be empty")
+var errNoScheme = fmt.Errorf("no scheme")
 
-func sourceSchemeFromURL(url string) (string, error) {
-	u, err := schemeFromURL(url)
-	if err != nil {
-		return "", fmt.Errorf("source: %v", err)
-	}
-	return u, nil
-}
-
-func databaseSchemeFromURL(url string) (string, error) {
-	u, err := schemeFromURL(url)
-	if err != nil {
-		return "", fmt.Errorf("database: %v", err)
-	}
-	return u, nil
-}
-
-// schemeFromURL returns the scheme from a URL string
-func schemeFromURL(url string) (string, error) {
-	if url == "" {
-		return "", errEmptyURL
-	}
-
+// schemeFromUrl returns the scheme from a URL string
+func schemeFromUrl(url string) (string, error) {
 	u, err := nurl.Parse(url)
 	if err != nil {
 		return "", err
 	}
+
 	if len(u.Scheme) == 0 {
 		return "", errNoScheme
 	}
