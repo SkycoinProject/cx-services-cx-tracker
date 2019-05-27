@@ -19,6 +19,7 @@ FROM busybox
 VOLUME /root/.cx-tracker/
 
 COPY --from=build /tmp/files /
+COPY script/cx-tracker-migration/ /etc/cx-tracker/cx-tracker-migration/
 
 EXPOSE 8085
 
