@@ -34,7 +34,7 @@ func Init() func() {
 		viper.GetString("database.migration-source"),
 		viper.GetString("database.name"), driver)
 	if err != nil {
-		log.Fatal("Error while preparing database migration", err)
+		log.Fatal("Error while preparing database migration: ", err)
 	}
 
 	if err := m.Up(); err != nil {

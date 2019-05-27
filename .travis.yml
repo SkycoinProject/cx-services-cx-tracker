@@ -22,4 +22,4 @@ deploy:
   script: bash docker_push.sh
   on:
     all_branches: true
-    condition: "$TRAVIS_PULL_REQUEST = false && $TRAVIS_BRANCH =~ ^master|develop$"
+    condition: "$TRAVIS_PULL_REQUEST = false && $TRAVIS_BRANCH == develop"
