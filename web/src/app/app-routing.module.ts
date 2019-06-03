@@ -9,7 +9,7 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      {path: 'all', component: AllConfigurationsComponent}
+      {path: '', component: AllConfigurationsComponent}
     ]
   },
   {path: '**', component: PageNotFoundComponent}

@@ -9,7 +9,8 @@
     "ALL_CONFIGURATIONS": "All configurations"
   },
   "TABLE": {
-    "NO_RESULTS": "No results found"
+    "NO_RESULTS": "No results found",
+    "FILTER_CONFIGURATIONS": "Filter configurations"
   },
   "TRANSACTION": {
     "HASH": "Hash",
