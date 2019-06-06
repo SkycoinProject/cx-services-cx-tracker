@@ -7,5 +7,17 @@
   },
   "HEADER": {
     "ALL_CONFIGURATIONS": "All configurations"
+  },
+  "TABLE": {
+    "NO_RESULTS": "No results found",
+    "FILTER_CONFIGURATIONS": "Filter configurations"
+  },
+  "TRANSACTION": {
+    "HASH": "Hash",
+    "CREATED_AT" : "Created at",
+    "TYPE": "Type",
+    "SERVERS": "Servers running this config:",
+    "GEN_HASH": "Genesis hash",
+    "UPDATED_AT": "Updated at"
   }
 }
