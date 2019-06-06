@@ -10,6 +10,6 @@ format: ## Formats the code. Must have goimports installed
 		goimports -w -local github.com/watercompany/cx-tracker ./cmd
 		goimports -w -local github.com/watercompany/cx-tracker ./src
 
-test:
+test:   ## Run test
 		@mkdir -p coverage/
-		go test -race -tags no_ci -cover -timeout=5m ./...
+		go test -race -cover -timeout=5m ./...

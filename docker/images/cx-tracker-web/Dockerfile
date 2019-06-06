@@ -1,4 +1,4 @@
-FROM node:8-alpine AS build
+FROM node:10.15.0-alpine AS build
 
 # Set work directory
 WORKDIR /usr/src/cx-tracker-web/
