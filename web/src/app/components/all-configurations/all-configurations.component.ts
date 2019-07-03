@@ -99,7 +99,7 @@ export class ExampleDataSource extends DataSource<any> {
     return Observable.merge(...displayDataChanges).map(() => {
       // Filter data
       this.filteredData = this._exampleDatabase.data.slice().filter((transaction: Transaction) => {
-        const searchStr = (transaction.id + transaction.hash).toLowerCase();
+        const searchStr = (transaction.chainType + transaction.config.genesisHash).toLowerCase();
         return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
       });
 
