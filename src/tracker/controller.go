@@ -27,6 +27,7 @@ func (ctrl Controller) RegisterAPIs(public *gin.RouterGroup, closed *gin.RouterG
 	public.PUT("/config", ctrl.saveConfig)
 	public.GET("/configs", ctrl.getConfigs)
 	public.GET("/config/:genesisHash", ctrl.getConfig)
+	public.GET("/config/:genesisHash/file", ctrl.getConfigFile)
 }
 
 // @Summary Save/update configuration
@@ -75,6 +76,31 @@ func (ctrl Controller) getConfig(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, app)
+}
+
+// @Summary Returns configuration file for genesisHash
+// @Description Returns configuration file for genesisHash
+// @Tags configuration
+// @Produce json
+// @Param genesisHash query string true "Config genesisHash"
+// @Success 200 {object} tracker.cxApplicationConfig
+// @Failure 404 {object} api.ErrorResponse
+// @Failure 500 {object} api.ErrorResponse
+// @Router /config/:genesisHash/file [get]
+func (ctrl Controller) getConfigFile(c *gin.Context) {
+	hash := c.Param("genesisHash")
+	app, err := ctrl.service.getApplicationByGenesisHash(hash)
+
+	if err != nil {
+		if err == errCannotFindApplication {
+			c.AbortWithStatusJSON(http.StatusNotFound, api.ErrorResponse{Error: fmt.Errorf("%v %v", err, hash).Error()})
+			return
+		}
+		c.AbortWithStatusJSON(http.StatusInternalServerError, api.ErrorResponse{Error: err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, app.Config)
 }
 
 // @Summary Returns list of all stored configurations
