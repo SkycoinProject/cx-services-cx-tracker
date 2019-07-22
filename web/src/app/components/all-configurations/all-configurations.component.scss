@@ -27,3 +27,16 @@ tr.example-element-row:not(.example-expanded-row):active {
   display: flex;
 }
 
+
+.mat-column-hash {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+
+  @media (max-width: 1000px) {
+    max-width: 150px;
+  }
+}
+
+
