@@ -21,6 +21,8 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
   ],
 })
 export class AllConfigurationsComponent implements OnInit {
+  public copyText = 'TRANSACTION.COPY';
+
   dataSource: ExampleDataSource | null;
   columnsToDisplay = ['hash', 'createdAt', 'updatedAt', 'chainType'];
   expandedElement: Transaction;
@@ -33,6 +35,42 @@ export class AllConfigurationsComponent implements OnInit {
 
   ngOnInit() {
     this.loadData(this);
+  }
+
+  public copyToClipboard(secretInfo: string): void {
+    let body = document.getElementsByTagName('body')[0];
+    const input: any = document.createElement('INPUT');
+    body.appendChild(input);
+    input.setAttribute('value', secretInfo);
+    const isiOSDevice = navigator.userAgent.match(/ipad|iphone/i);
+
+    if (isiOSDevice) {
+      var editable = input.contentEditable;
+      var readOnly = input.readOnly;
+
+      input.contentEditable = true;
+      input.readOnly = false;
+
+      var range = document.createRange();
+      range.selectNodeContents(input);
+
+      var selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      input.setSelectionRange(0, 999999);
+      input.contentEditable = editable;
+      input.readOnly = readOnly;
+    } else {
+      input.select();
+    }
+    document.execCommand('copy');
+    body.removeChild(input);
+    this.copyText = 'TRANSACTION.COPIED';
+  }
+
+  public changeText(): void {
+    this.copyText = 'TRANSACTION.COPY';
   }
 
   public loadData(_this) {

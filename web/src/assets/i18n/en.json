@@ -18,6 +18,8 @@
     "TYPE": "Type",
     "SERVERS": "Servers running this config:",
     "GEN_HASH": "Genesis hash",
-    "UPDATED_AT": "Updated at"
+    "UPDATED_AT": "Updated at",
+    "COPY": "Click to copy hash",
+    "COPIED": "Copied"
   }
 }

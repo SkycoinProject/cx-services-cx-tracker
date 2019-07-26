@@ -27,8 +27,7 @@ tr.example-element-row:not(.example-expanded-row):active {
   display: flex;
 }
 
-
-.mat-column-hash {
+.example-colapsed-row .mat-column-hash {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -39,4 +38,44 @@ tr.example-element-row:not(.example-expanded-row):active {
   }
 }
 
+.example-expanded-row .mat-column-hash {
+  text-overflow: ellipsis;
+  max-width: 300px;
+  word-wrap: break-word;
 
+  @media (max-width: 1000px) {
+    max-width: 150px;
+  }
+}
+
+.mat-icon-button {
+  top: -5px;
+}
+
+.mat-icon-button {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.mat-icon-button .tooltiptext {
+  visibility: hidden;
+  width: auto;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.mat-icon-button:hover .tooltiptext {
+  visibility: visible;
+}
+
+.example-colapsed-row .mat-icon-button {
+  display: none;
+}

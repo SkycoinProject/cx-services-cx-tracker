@@ -12,7 +12,13 @@
       <table mat-table #table [dataSource]="dataSource" matSort matSortActive="createdAt" matSortDirection="desc" class="mat-cell" multiTemplateDataRows>
         <ng-container matColumnDef="hash">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'TRANSACTION.GEN_HASH' | translate}}</th>
-          <td mat-cell *matCellDef="let element">{{element?.config.genesisHash ? element.config.genesisHash : element.hash}} </td>
+          <td mat-cell *matCellDef="let element">
+            {{element?.config.genesisHash ? element.config.genesisHash : element.hash}}
+            <button mat-icon-button color="primary" (click)="copyToClipboard(element.config.genesisHash)" (mouseleave)="changeText()">
+              <mat-icon>file_copy</mat-icon>
+              <span class="tooltiptext">{{copyText | translate}}</span>
+            </button>
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="createdAt">
@@ -53,6 +59,7 @@
         <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
             class="example-element-row"
             [class.example-expanded-row]="expandedElement === element"
+            [class.example-colapsed-row]="expandedElement !== element"
             (click)="expandedElement = element">
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
