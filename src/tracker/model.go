@@ -28,7 +28,10 @@ type Server struct {
 }
 
 type cxApplicationConfig struct {
-	GenesisHash string `json:"genesisHash"`
+	GenesisHash    string `json:"genesisHash"`
+	GenesisAddress string `json:"genesisAddress"`
+	PublicKey      string `json:"publicKey"`
+	SecretKey      string `json:"secretKey"`
 }
 
 type chainType string

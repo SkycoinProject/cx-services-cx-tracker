@@ -45,10 +45,20 @@ func (us *Service) createCxApplication(config []byte, address string) error {
 	}
 
 	hash := fmt.Sprintf("%x", h.Sum(nil))
-	app, err := us.db.getByHash(hash)
+	app, err := us.db.getByGenesisHash(conf.GenesisHash)
 
 	switch err {
 	case nil:
+		var existingConfig cxApplicationConfig
+		if err := json.Unmarshal(app.Config, &existingConfig); err != nil {
+			log.Error("Error while parsing existing config: ", err)
+			return errUnableToParseConfig
+		}
+
+		if us.isConfigurationChanged(existingConfig, conf) {
+			return errExistingGenesisHash
+		}
+
 		exsitingServer := Server{}
 		for _, server := range app.Servers {
 			if address == server.Address {
@@ -85,6 +95,14 @@ func (us *Service) createCxApplication(config []byte, address string) error {
 	}
 
 	return nil
+}
+
+func (us *Service) isConfigurationChanged(existingConfig, conf cxApplicationConfig) bool {
+
+	return existingConfig.GenesisAddress != conf.GenesisAddress ||
+		existingConfig.PublicKey != conf.PublicKey ||
+		existingConfig.SecretKey != conf.SecretKey
+
 }
 
 func (us *Service) getApplicationByGenesisHash(genesisHash string) (CxApplication, error) {
