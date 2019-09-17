@@ -3,7 +3,7 @@ package tracker
 import (
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
-	"github.com/watercompany/cx-tracker/src/database/postgres"
+	"github.com/SkycoinPro/cx-services-cx-tracker/src/database/postgres"
 )
 
 type data interface {

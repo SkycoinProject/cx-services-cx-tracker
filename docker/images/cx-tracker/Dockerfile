@@ -1,6 +1,6 @@
 FROM golang:1.11-stretch AS build
 
-WORKDIR ${GOPATH}/src/github.com/watercompany/cx-tracker/
+WORKDIR ${GOPATH}/src/github.com/SkycoinPro/cx-services-cx-tracker/
 
 ADD cmd/ cmd/
 ADD src/ src/

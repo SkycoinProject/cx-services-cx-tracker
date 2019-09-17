@@ -6,7 +6,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
-	"github.com/watercompany/cx-tracker/src/api"
+	"github.com/SkycoinPro/cx-services-cx-tracker/src/api"
 )
 
 // Server model

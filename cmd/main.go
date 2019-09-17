@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/watercompany/cx-tracker/src/app"
-	"github.com/watercompany/cx-tracker/src/config"
-	"github.com/watercompany/cx-tracker/src/database/postgres"
-	"github.com/watercompany/cx-tracker/src/tracker"
+	"github.com/SkycoinPro/cx-services-cx-tracker/src/app"
+	"github.com/SkycoinPro/cx-services-cx-tracker/src/config"
+	"github.com/SkycoinPro/cx-services-cx-tracker/src/database/postgres"
+	"github.com/SkycoinPro/cx-services-cx-tracker/src/tracker"
 )
 
 // @title Skywire CX Tracker API

@@ -7,8 +7,8 @@ install-linters: ## Install linters
 		go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 
 format: ## Formats the code. Must have goimports installed
-		goimports -w -local github.com/watercompany/cx-tracker ./cmd
-		goimports -w -local github.com/watercompany/cx-tracker ./src
+		goimports -w -local github.com/SkycoinPro/cx-services-cx-tracker ./cmd
+		goimports -w -local github.com/SkycoinPro/cx-services-cx-tracker ./src
 
 test:   ## Run test
 		@mkdir -p coverage/

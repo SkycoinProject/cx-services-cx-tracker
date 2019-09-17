@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/watercompany/cx-tracker/src/api"
+	"github.com/SkycoinPro/cx-services-cx-tracker/src/api"
 )
 
 // Controller handles tracker requests
